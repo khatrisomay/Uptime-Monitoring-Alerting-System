@@ -1,0 +1,19 @@
+replicaCount: 2
+
+frontend:
+  image:
+    repository: uptime-monitor-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: LoadBalancer
+    port: 80
+
+backend:
+  image:
+    repository: uptime-monitor-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
