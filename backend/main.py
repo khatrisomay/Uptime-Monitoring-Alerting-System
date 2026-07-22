@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+import time
+import httpx
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -20,27 +22,55 @@ class ServiceStatus(BaseModel):
     uptime: float
     ping_ms: int
 
+class MonitorRequest(BaseModel):
+    url: str
+
+@app.post("/api/monitor")
+async def monitor_url(req: MonitorRequest):
+    """
+    Pings a URL and returns its status and response time.
+    """
+    url = req.url
+    if not url.startswith("http"):
+        url = "https://" + url
+
+    start_time = time.time()
+    try:
+        async with httpx.AsyncClient(verify=False) as client:
+            response = await client.get(url, timeout=5.0)
+        
+        ping_ms = int((time.time() - start_time) * 1000)
+        
+        if response.status_code < 400:
+            status = "UP"
+        else:
+            status = "DOWN"
+
+    except httpx.RequestError:
+        status = "DOWN"
+        ping_ms = 0
+    except Exception:
+        status = "DOWN"
+        ping_ms = 0
+
+    return {
+        "status": status,
+        "ping_ms": ping_ms
+    }
+
 @app.get("/api/status")
 async def get_status():
     """
     Mock endpoint returning the status of monitored services.
-    In the future, this will read from a database populated by a Celery worker.
     """
     return {
         "services": [
             {
                 "name": "Production API",
-                "url": "api.example.com",
+                "url": "https://api.example.com",
                 "status": "UP",
                 "uptime": 99.9,
                 "ping_ms": 42
-            },
-            {
-                "name": "Payment Gateway",
-                "url": "pay.example.com",
-                "status": "DOWN",
-                "uptime": 95.0,
-                "ping_ms": 0
             }
         ]
     }
