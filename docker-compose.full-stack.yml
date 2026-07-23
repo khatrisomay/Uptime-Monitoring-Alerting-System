@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: uptime-postgres
+    environment:
+      POSTGRES_DB: uptimedb
+      POSTGRES_USER: uptimeuser
+      POSTGRES_PASSWORD: uptimepassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - uptime-internal
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uptimeuser -d uptimedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: uptime-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - uptime-internal
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: uptime-backend-full
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://uptimeuser:uptimepassword@postgres:5432/uptimedb
+      - REDIS_URL=redis://redis:6379/0
+      - PORT=8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - uptime-internal
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: uptime-frontend-full
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - uptime-internal
+    restart: always
+
+networks:
+  uptime-internal:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
