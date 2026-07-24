@@ -9,6 +9,16 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        DOCKER_REGISTRY    = 'docker.io'
+        DOCKER_USER        = 'khatrisomay'
+        IMAGE_NAME_BACKEND = 'uptime-monitor-backend'
+        IMAGE_NAME_FRONTEND= 'uptime-monitor-frontend'
+        IMAGE_TAG          = "${BUILD_NUMBER}-${GIT_COMMIT[0..7]}"
+        DOCKER_CRED_ID     = 'dockerhub-credentials'
+        KUBE_CONFIG_ID     = 'kubeconfig-credentials'
+    }
+
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Target Git branch for deployment')
         choice(name: 'ENVIRONMENT', choices: ['staging', 'production', 'dev'], description: 'Deployment target environment')
@@ -18,8 +28,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
-                // git branch: "${params.BRANCH_NAME}", url: 'https://github.com/khatrisomay/Uptime-Monitoring-Alerting-System.git'
+                echo "Checking out code for commit ${env.GIT_COMMIT}..."
+                // checkout scm
             }
         }
         
@@ -45,10 +55,10 @@ pipeline {
 
         stage('Build & Push Docker Images') {
             steps {
-                echo 'Building backend image...'
-                // sh 'docker build -t yourusername/uptime-backend ./backend'
-                echo 'Building frontend image...'
-                // sh 'docker build -t yourusername/uptime-frontend ./frontend'
+                echo "Building backend image ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:${env.IMAGE_TAG}..."
+                // sh 'docker build -t ...'
+                echo "Building frontend image ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:${env.IMAGE_TAG}..."
+                // sh 'docker build -t ...'
             }
         }
 
