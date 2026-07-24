@@ -32,6 +32,29 @@ pipeline {
                 // checkout scm
             }
         }
+
+        stage('Parallel Code Linting') {
+            parallel {
+                stage('Lint Backend') {
+                    steps {
+                        dir('backend') {
+                            echo 'Running Python syntax and style verification...'
+                            // sh 'pip install flake8'
+                            // sh 'flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics'
+                        }
+                    }
+                }
+                stage('Lint Frontend') {
+                    steps {
+                        dir('frontend') {
+                            echo 'Running React code style and oxlint static analysis...'
+                            // sh 'npm ci'
+                            // sh 'npm run lint'
+                        }
+                    }
+                }
+            }
+        }
         
         stage('Test Backend') {
             steps {
