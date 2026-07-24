@@ -1,11 +1,17 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Target Git branch for deployment')
+        choice(name: 'ENVIRONMENT', choices: ['staging', 'production', 'dev'], description: 'Deployment target environment')
+        booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip unit test execution for emergency hotfix deployments')
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out code...'
-                // git 'https://github.com/yourusername/uptime-monitor.git'
+                // git branch: "${params.BRANCH_NAME}", url: 'https://github.com/khatrisomay/Uptime-Monitoring-Alerting-System.git'
             }
         }
         
@@ -40,7 +46,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                echo 'Applying K8s manifests...'
+                echo "Applying K8s manifests to ${params.ENVIRONMENT}..."
                 // sh 'kubectl apply -f ./k8s/'
             }
         }
