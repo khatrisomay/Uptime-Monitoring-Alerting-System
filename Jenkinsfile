@@ -121,4 +121,19 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo "Pipeline succeeded! Build #${env.BUILD_NUMBER} deployed successfully to ${params.ENVIRONMENT}."
+            // slackSend channel: '#deployments', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]"
+        }
+        failure {
+            echo "Pipeline failed! Build #${env.BUILD_NUMBER} requires attention."
+            // slackSend channel: '#deployments-alerts', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]"
+        }
+        always {
+            echo "Cleaning workspace for build #${env.BUILD_NUMBER}..."
+            cleanWs deleteDirs: true, notFailBuild: true
+        }
+    }
 }
