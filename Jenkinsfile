@@ -91,10 +91,22 @@ pipeline {
 
         stage('Build & Push Docker Images') {
             steps {
-                echo "Building backend image ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:${env.IMAGE_TAG}..."
-                // sh 'docker build -t ...'
-                echo "Building frontend image ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:${env.IMAGE_TAG}..."
-                // sh 'docker build -t ...'
+                withCredentials([usernamePassword(credentialsId: env.DOCKER_CRED_ID, usernameVariable: 'DOCKER_USER_VAR', passwordVariable: 'DOCKER_PASS_VAR')]) {
+                    echo "Logging into Docker Registry ${env.DOCKER_REGISTRY}..."
+                    sh "echo \$DOCKER_PASS_VAR | docker login -u \$DOCKER_USER_VAR --password-stdin ${env.DOCKER_REGISTRY}"
+                    
+                    echo "Building & pushing backend container..."
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:${env.IMAGE_TAG} ./backend"
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:latest ./backend"
+                    sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:${env.IMAGE_TAG}"
+                    sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_BACKEND}:latest"
+
+                    echo "Building & pushing frontend container..."
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:${env.IMAGE_TAG} ./frontend"
+                    sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:latest ./frontend"
+                    sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:${env.IMAGE_TAG}"
+                    sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_USER}/${env.IMAGE_NAME_FRONTEND}:latest"
+                }
             }
         }
 
