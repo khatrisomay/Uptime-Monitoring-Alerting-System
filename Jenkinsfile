@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '15', artifactNumToKeepStr: '5'))
+        disableConcurrentBuilds()
+        timeout(time: 1, unit: 'HOURS')
+        ansiColor('xterm')
+        timestamps()
+    }
+
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Target Git branch for deployment')
         choice(name: 'ENVIRONMENT', choices: ['staging', 'production', 'dev'], description: 'Deployment target environment')
