@@ -57,11 +57,18 @@ pipeline {
         }
         
         stage('Test Backend') {
+            when {
+                expression { return !params.SKIP_TESTS }
+            }
             steps {
-                echo 'Running pytest...'
                 dir('backend') {
-                    // sh 'pip install -r requirements.txt'
-                    // sh 'pytest'
+                    echo 'Installing dependencies and executing Pytest suite...'
+                    sh '''
+                        python -m pip install --upgrade pip
+                        pip install -r requirements.txt pytest pytest-cov
+                        pytest tests/ --junitxml=test-results.xml --cov=. --cov-report=xml
+                    '''
+                    junit allowEmptyResults: true, testResults: 'test-results.xml'
                 }
             }
         }
