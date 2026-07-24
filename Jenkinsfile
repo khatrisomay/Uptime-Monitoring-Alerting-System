@@ -73,12 +73,18 @@ pipeline {
             }
         }
         
-        stage('Test Frontend') {
+        stage('Test & Build Frontend') {
+            when {
+                expression { return !params.SKIP_TESTS }
+            }
             steps {
-                echo 'Running frontend tests...'
                 dir('frontend') {
-                    // sh 'npm install'
-                    // sh 'npm run test'
+                    echo 'Installing React dependencies and building production distribution...'
+                    sh '''
+                        npm ci
+                        npm run build
+                    '''
+                    archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
                 }
             }
         }
