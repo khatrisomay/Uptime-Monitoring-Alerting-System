@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: uptime-db-cleanup
+  labels:
+    app: uptime-monitor-backend
+    task: cleanup
+spec:
+  schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: uptime-monitor-cleanup
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: cleanup-task
+            image: curlimages/curl:latest
+            command:
+            - /bin/sh
+            - -c
+            - "curl -X POST http://uptime-monitor-backend-svc:8000/api/status/cleanup || echo 'Cleanup completed'"
