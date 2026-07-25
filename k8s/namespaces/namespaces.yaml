@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uptime-dev
+  labels:
+    name: uptime-dev
+    environment: development
+    managed-by: kubectl
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uptime-staging
+  labels:
+    name: uptime-staging
+    environment: staging
+    managed-by: kubectl
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uptime-prod
+  labels:
+    name: uptime-prod
+    environment: production
+    managed-by: kubectl
