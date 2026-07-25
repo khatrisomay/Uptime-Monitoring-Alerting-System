@@ -29,6 +29,13 @@ spec:
             name: backend-config
         - secretRef:
             name: backend-secrets
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
         startupProbe:
           httpGet:
             path: /api/status
