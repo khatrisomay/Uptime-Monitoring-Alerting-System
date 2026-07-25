@@ -114,7 +114,7 @@ pipeline {
             steps {
                 echo "Applying K8s manifests to environment: ${params.ENVIRONMENT}..."
                 // withKubeConfig(credentialsId: env.KUBE_CONFIG_ID) {
-                //     sh "kubectl apply -f ./k8s/ --namespace=${params.ENVIRONMENT}"
+                //     sh "kubectl apply -f ./deployments/k8s/ --namespace=${params.ENVIRONMENT}"
                 //     sh "kubectl rollout status deployment/uptime-monitor-backend --namespace=${params.ENVIRONMENT}"
                 //     sh "kubectl rollout status deployment/uptime-monitor-frontend --namespace=${params.ENVIRONMENT}"
                 // }

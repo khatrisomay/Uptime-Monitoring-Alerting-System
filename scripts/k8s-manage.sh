@@ -6,6 +6,7 @@
 set -e
 
 NAMESPACE="${NAMESPACE:-default}"
+K8S_DIR="deployments/k8s"
 
 usage() {
     echo "Usage: $0 {apply|status|pods|logs|scale|restart|delete}"
@@ -22,15 +23,15 @@ usage() {
 case "$1" in
     apply)
         echo "Applying Kubernetes manifests to namespace [${NAMESPACE}]..."
-        kubectl apply -f k8s/namespaces/ --namespace="${NAMESPACE}" 2>/dev/null || true
-        kubectl apply -f k8s/configmaps/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/secrets/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/storage/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/backend/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/frontend/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/hpa/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/pdb/ --namespace="${NAMESPACE}"
-        kubectl apply -f k8s/ingress/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/namespaces/ --namespace="${NAMESPACE}" 2>/dev/null || true
+        kubectl apply -f ${K8S_DIR}/configmaps/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/secrets/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/storage/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/backend/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/frontend/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/hpa/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/pdb/ --namespace="${NAMESPACE}"
+        kubectl apply -f ${K8S_DIR}/ingress/ --namespace="${NAMESPACE}"
         echo "Manifests applied successfully."
         ;;
     status)
@@ -59,9 +60,9 @@ case "$1" in
         ;;
     delete)
         echo "Deleting all Kubernetes resources..."
-        kubectl delete -f k8s/ingress/ --namespace="${NAMESPACE}" 2>/dev/null || true
-        kubectl delete -f k8s/frontend/ --namespace="${NAMESPACE}" 2>/dev/null || true
-        kubectl delete -f k8s/backend/ --namespace="${NAMESPACE}" 2>/dev/null || true
+        kubectl delete -f ${K8S_DIR}/ingress/ --namespace="${NAMESPACE}" 2>/dev/null || true
+        kubectl delete -f ${K8S_DIR}/frontend/ --namespace="${NAMESPACE}" 2>/dev/null || true
+        kubectl delete -f ${K8S_DIR}/backend/ --namespace="${NAMESPACE}" 2>/dev/null || true
         echo "Resources cleaned up."
         ;;
     *)

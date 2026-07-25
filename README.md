@@ -11,6 +11,32 @@ A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built
 
 ---
 
+## 📂 Repository Structure
+
+```
+uptime-monitor/
+├── .github/              # GitHub Actions CI workflows
+├── backend/              # FastAPI Python backend service
+├── frontend/             # React 19 Vite web application
+├── deployments/          # DevOps & Infrastructure orchestration
+│   ├── docker/           # Docker Compose files & Nginx gateway proxy
+│   ├── k8s/              # Kubernetes manifests, Helm charts & Pod configs
+│   └── jenkins/          # Jenkins agent Dockerfile, Job DSL & rollback pipelines
+├── docs/                 # Complete system documentation guides
+│   ├── ARCHITECTURE.md   # High-level architecture & design
+│   ├── CONTRIBUTING.md   # Collaboration guidelines
+│   ├── DOCKER.md         # Container deployment & hardening
+│   ├── JENKINS.md        # CI/CD pipeline setup & automation
+│   └── KUBERNETES.md     # Pod management & operations
+├── scripts/              # CLI helper automation scripts
+├── docker-compose.yml    # Root Docker Compose file
+├── Jenkinsfile           # Primary Jenkins Pipeline script
+├── LICENSE               # MIT License
+└── README.md             # Project overview
+```
+
+---
+
 ## 🌟 Key Features
 
 * **Real-time Website Ping & Health Checks**: Instant response time measurements and uptime monitoring.
@@ -23,51 +49,50 @@ A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Documentation
 
-### Frontend
-- **Framework**: React 19 (Vite)
-- **Styling**: Tailwind CSS + Custom Glassmorphism Shaders
-- **Visualization**: Recharts & Custom SVG Indicators
-- **Routing**: React Router v7
+- **Frontend**: React 19, Tailwind CSS, Recharts, React Router v7
+- **Backend**: Python FastAPI, `httpx`, Pydantic v2, Uvicorn
+- **DevOps & Infrastructure**: Docker, Kubernetes, Jenkins, Helm
 
-### Backend
-- **Framework**: Python FastAPI
-- **HTTP Client**: `httpx` (Async HTTP)
-- **Validation**: Pydantic v2
-- **ASGI Server**: Uvicorn
-
-### DevOps & Infrastructure
-- **Containerization**: Docker (Multi-stage builds)
-- **Orchestration**: Kubernetes Deployments & Services
-- **CI/CD**: Jenkins Pipeline (`Jenkinsfile`)
+### 📚 Detailed Documentation Guides
+- 🏛️ [System Architecture](docs/ARCHITECTURE.md)
+- 🐳 [Docker Deployment & Hardening Guide](docs/DOCKER.md)
+- 🏗️ [Jenkins CI/CD Pipeline Guide](docs/JENKINS.md)
+- ☸️ [Kubernetes Pod Management Guide](docs/KUBERNETES.md)
+- 🤝 [Contributing Guidelines](docs/CONTRIBUTING.md)
 
 ---
 
 ## 🚦 Getting Started
 
-### Prerequisites
-- Node.js (v18+)
-- Python (3.11+)
-- Docker (Optional)
-
-### Running Frontend Locally
+### 1. Running with Docker Compose (Recommended)
 ```bash
-cd frontend
-npm install
-npm run dev
+# Start full application (Frontend + Backend)
+docker-compose up --build -d
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+- **Frontend App**: [http://localhost:80](http://localhost:80)
+- **Backend API**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### Running Backend Locally
+### 2. Using Helper CLI Scripts
 ```bash
-cd backend
-pip install -r requirements.txt
-python main.py
+# Manage Docker environments
+./scripts/docker-manage.sh dev
+
+# Deploy to Kubernetes cluster
+./scripts/k8s-manage.sh apply
 ```
-The API will start at [http://localhost:8000](http://localhost:8000).
+
+### 3. Local Development (Without Docker)
+```bash
+# Frontend
+cd frontend && npm install && npm run dev
+
+# Backend
+cd backend && pip install -r requirements.txt && python main.py
+```
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
