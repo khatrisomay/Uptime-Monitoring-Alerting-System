@@ -17,6 +17,18 @@ spec:
         app: uptime-monitor-frontend
         tier: web
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - uptime-monitor-frontend
+              topologyKey: "kubernetes.io/hostname"
       securityContext:
         seccompProfile:
           type: RuntimeDefault
