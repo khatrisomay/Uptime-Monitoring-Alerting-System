@@ -1,0 +1,23 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: uptime-backend-pdb
+  labels:
+    app: uptime-monitor-backend
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: uptime-monitor-backend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: uptime-frontend-pdb
+  labels:
+    app: uptime-monitor-frontend
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: uptime-monitor-frontend
