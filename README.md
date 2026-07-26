@@ -6,6 +6,7 @@
 ![Docker](https://img.shields.io/badge/Container-Docker-2496ED?logo=docker)
 ![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?logo=kubernetes)
 ![Jenkins](https://img.shields.io/badge/CI%2FCD-Jenkins-D24939?logo=jenkins)
+![Terraform](https://img.shields.io/badge/IaC-Terraform-7B42BC?logo=terraform)
 
 A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built with a futuristic **Vitreous Glass Morphism** design.
 
@@ -21,13 +22,15 @@ uptime-monitor/
 ├── deployments/          # DevOps & Infrastructure orchestration
 │   ├── docker/           # Docker Compose files & Nginx gateway proxy
 │   ├── k8s/              # Kubernetes manifests, Helm charts & Pod configs
-│   └── jenkins/          # Jenkins agent Dockerfile, Job DSL & rollback pipelines
+│   ├── jenkins/          # Jenkins agent Dockerfile, Job DSL & rollback pipelines
+│   └── terraform/        # AWS EKS & VPC Infrastructure as Code (IaC)
 ├── docs/                 # Complete system documentation guides
 │   ├── ARCHITECTURE.md   # High-level architecture & design
 │   ├── CONTRIBUTING.md   # Collaboration guidelines
 │   ├── DOCKER.md         # Container deployment & hardening
 │   ├── JENKINS.md        # CI/CD pipeline setup & automation
-│   └── KUBERNETES.md     # Pod management & operations
+│   ├── KUBERNETES.md     # Pod management & operations
+│   └── TERRAFORM.md      # AWS EKS & VPC IaC guide
 ├── scripts/              # CLI helper automation scripts
 ├── docker-compose.yml    # Root Docker Compose file
 ├── Jenkinsfile           # Primary Jenkins Pipeline script
@@ -45,7 +48,7 @@ uptime-monitor/
 * **Live Action Controls**: Parallel service refreshing, status filtering (Operational/Incidents), and service deletion.
 * **One-Click CSV Reports**: Export service health metrics to CSV instantly.
 * **Authentication Flow**: Complete login and registration user experience.
-* **Containerized Architecture**: Production-ready Dockerfiles, Kubernetes manifests, and Jenkins pipeline scripts.
+* **Containerized Architecture**: Production-ready Dockerfiles, Kubernetes manifests, Jenkins pipelines, and Terraform IaC scripts.
 
 ---
 
@@ -53,13 +56,14 @@ uptime-monitor/
 
 - **Frontend**: React 19, Tailwind CSS, Recharts, React Router v7
 - **Backend**: Python FastAPI, `httpx`, Pydantic v2, Uvicorn
-- **DevOps & Infrastructure**: Docker, Kubernetes, Jenkins, Helm
+- **DevOps & IaC**: Docker, Kubernetes, Jenkins, Helm, Terraform (AWS)
 
 ### 📚 Detailed Documentation Guides
 - 🏛️ [System Architecture](docs/ARCHITECTURE.md)
 - 🐳 [Docker Deployment & Hardening Guide](docs/DOCKER.md)
 - 🏗️ [Jenkins CI/CD Pipeline Guide](docs/JENKINS.md)
 - ☸️ [Kubernetes Pod Management Guide](docs/KUBERNETES.md)
+- 🏗️ [Terraform AWS IaC Infrastructure Guide](docs/TERRAFORM.md)
 - 🤝 [Contributing Guidelines](docs/CONTRIBUTING.md)
 
 ---
@@ -74,13 +78,11 @@ docker-compose up --build -d
 - **Frontend App**: [http://localhost:80](http://localhost:80)
 - **Backend API**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### 2. Using Helper CLI Scripts
+### 2. AWS Infrastructure Provisioning (Terraform)
 ```bash
-# Manage Docker environments
-./scripts/docker-manage.sh dev
-
-# Deploy to Kubernetes cluster
-./scripts/k8s-manage.sh apply
+cd deployments/terraform
+terraform init
+terraform plan
 ```
 
 ### 3. Local Development (Without Docker)
