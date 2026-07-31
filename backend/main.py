@@ -50,7 +50,7 @@ async def monitor_url(req: MonitorRequest):
     start_time = time.time()
     try:
         async with httpx.AsyncClient(verify=False) as client:
-            response = await client.get(url, timeout=5.0)
+            response = await client.get(url, timeout=10.0)
         
         ping_seconds = time.time() - start_time
         ping_ms = int(ping_seconds * 1000)
