@@ -1,0 +1,18 @@
+groups:
+  - name: uptime_alerts
+    rules:
+      - alert: BackendHighLatency
+        expr: histogram_quantile(0.95, rate(uptime_ping_latency_seconds_bucket[5m])) > 2.0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High backend ping latency detected (> 2 seconds)"
+
+      - alert: ServiceDownIncrease
+        expr: rate(uptime_ping_requests_total{status="DOWN"}[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spike in website down detections observed"
