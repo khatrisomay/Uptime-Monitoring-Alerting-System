@@ -3,6 +3,7 @@
 ![React](https://img.shields.io/badge/Frontend-React_19-61DAFB?logo=react)
 ![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwind-css)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
+![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-E6522C?logo=prometheus)
 ![Docker](https://img.shields.io/badge/Container-Docker-2496ED?logo=docker)
 ![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?logo=kubernetes)
 ![Jenkins](https://img.shields.io/badge/CI%2FCD-Jenkins-D24939?logo=jenkins)
@@ -16,13 +17,15 @@ A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built
 
 ```
 uptime-monitor/
-├── .github/              # GitHub Actions CI workflows
-├── backend/              # FastAPI Python backend service
+├── .github/              # GitHub Actions CI & Security workflows
+├── backend/              # FastAPI Python backend service & Prometheus metrics
 ├── frontend/             # React 19 Vite web application
 ├── deployments/          # DevOps & Infrastructure orchestration
 │   ├── docker/           # Docker Compose files & Nginx gateway proxy
-│   ├── k8s/              # Kubernetes manifests, Helm charts & Pod configs
+│   ├── grafana/          # Grafana monitoring dashboards
 │   ├── jenkins/          # Jenkins agent Dockerfile, Job DSL & rollback pipelines
+│   ├── k8s/              # Kubernetes manifests, Helm charts & Pod configs
+│   ├── prometheus/       # Prometheus scrape config & alerting rules
 │   └── terraform/        # AWS EKS & VPC Infrastructure as Code (IaC)
 ├── docs/                 # Complete system documentation guides
 │   ├── ARCHITECTURE.md   # High-level architecture & design
@@ -30,6 +33,7 @@ uptime-monitor/
 │   ├── DOCKER.md         # Container deployment & hardening
 │   ├── JENKINS.md        # CI/CD pipeline setup & automation
 │   ├── KUBERNETES.md     # Pod management & operations
+│   ├── OBSERVABILITY.md  # Prometheus metrics & Grafana guide
 │   └── TERRAFORM.md      # AWS EKS & VPC IaC guide
 ├── scripts/              # CLI helper automation scripts
 ├── docker-compose.yml    # Root Docker Compose file
@@ -43,6 +47,7 @@ uptime-monitor/
 ## 🌟 Key Features
 
 * **Real-time Website Ping & Health Checks**: Instant response time measurements and uptime monitoring.
+* **Prometheus & Grafana Observability**: Native `/metrics` endpoint with latency histograms and alert rules.
 * **Glass Morphism UI**: Premium futuristic dark mode dashboard with ambient glowing 3D elements.
 * **Interactive Latency Graphs**: Visual 24-hour response time analytics powered by Recharts.
 * **Live Action Controls**: Parallel service refreshing, status filtering (Operational/Incidents), and service deletion.
@@ -55,11 +60,12 @@ uptime-monitor/
 ## 🛠️ Tech Stack & Documentation
 
 - **Frontend**: React 19, Tailwind CSS, Recharts, React Router v7
-- **Backend**: Python FastAPI, `httpx`, Pydantic v2, Uvicorn
-- **DevOps & IaC**: Docker, Kubernetes, Jenkins, Helm, Terraform (AWS)
+- **Backend**: Python FastAPI, `httpx`, Prometheus Client, Pydantic v2, Uvicorn
+- **DevOps & Observability**: Docker, Kubernetes, Jenkins, Prometheus, Grafana, Terraform (AWS)
 
 ### 📚 Detailed Documentation Guides
 - 🏛️ [System Architecture](docs/ARCHITECTURE.md)
+- 📊 [Observability & Prometheus Guide](docs/OBSERVABILITY.md)
 - 🐳 [Docker Deployment & Hardening Guide](docs/DOCKER.md)
 - 🏗️ [Jenkins CI/CD Pipeline Guide](docs/JENKINS.md)
 - ☸️ [Kubernetes Pod Management Guide](docs/KUBERNETES.md)
@@ -77,22 +83,7 @@ docker-compose up --build -d
 ```
 - **Frontend App**: [http://localhost:80](http://localhost:80)
 - **Backend API**: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### 2. AWS Infrastructure Provisioning (Terraform)
-```bash
-cd deployments/terraform
-terraform init
-terraform plan
-```
-
-### 3. Local Development (Without Docker)
-```bash
-# Frontend
-cd frontend && npm install && npm run dev
-
-# Backend
-cd backend && pip install -r requirements.txt && python main.py
-```
+- **Metrics Endpoint**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
 
 ---
 
