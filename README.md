@@ -1,5 +1,6 @@
 # 🚀 Uptime Monitoring & Alerting System
 
+![Node](https://img.shields.io/badge/Node.js-20%2B-green?logo=node.js)
 ![React](https://img.shields.io/badge/Frontend-React_19-61DAFB?logo=react)
 ![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwind-css)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
@@ -17,7 +18,7 @@ A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built
 
 ```
 uptime-monitor/
-├── .github/              # GitHub Actions CI & Security workflows
+├── .github/              # GitHub Actions CI, Security & Issue templates
 ├── backend/              # FastAPI Python backend service & Prometheus metrics
 ├── frontend/             # React 19 Vite web application
 ├── deployments/          # DevOps & Infrastructure orchestration
@@ -36,6 +37,7 @@ uptime-monitor/
 │   ├── OBSERVABILITY.md  # Prometheus metrics & Grafana guide
 │   └── TERRAFORM.md      # AWS EKS & VPC IaC guide
 ├── scripts/              # CLI helper automation scripts
+├── .editorconfig         # Code formatting configuration
 ├── docker-compose.yml    # Root Docker Compose file
 ├── Jenkinsfile           # Primary Jenkins Pipeline script
 ├── LICENSE               # MIT License
@@ -57,8 +59,9 @@ uptime-monitor/
 
 ---
 
-## 🛠️ Tech Stack & Documentation
+## 🛠️ Tech Stack & Requirements
 
+- **Node.js**: v20.12.0+ or v22.x
 - **Frontend**: React 19, Tailwind CSS, Recharts, React Router v7
 - **Backend**: Python FastAPI, `httpx`, Prometheus Client, Pydantic v2, Uvicorn
 - **DevOps & Observability**: Docker, Kubernetes, Jenkins, Prometheus, Grafana, Terraform (AWS)
