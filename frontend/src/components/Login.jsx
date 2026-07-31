@@ -47,7 +47,7 @@ export default function Login() {
                 <input 
                   type="text" 
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40 transition-all"
                   placeholder="John Doe"
                 />
               </div>
@@ -79,7 +79,7 @@ export default function Login() {
                 <input 
                   type="password" 
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40 transition-all"
                   placeholder="••••••••"
                 />
               </div>
