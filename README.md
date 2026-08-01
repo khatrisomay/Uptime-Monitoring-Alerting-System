@@ -4,6 +4,7 @@
 ![React](https://img.shields.io/badge/Frontend-React_19-61DAFB?logo=react)
 ![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS-38B2AC?logo=tailwind-css)
 ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)
+![SQLite](https://img.shields.io/badge/Database-SQLite_3-003B57?logo=sqlite)
 ![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-E6522C?logo=prometheus)
 ![Docker](https://img.shields.io/badge/Container-Docker-2496ED?logo=docker)
 ![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?logo=kubernetes)
@@ -19,7 +20,7 @@ A state-of-the-art, full-stack **Uptime Monitoring and Alerting Platform** built
 ```
 uptime-monitor/
 ├── .github/              # GitHub Actions CI, Security & Issue templates
-├── backend/              # FastAPI Python backend service & Prometheus metrics
+├── backend/              # FastAPI Python backend service, SQLite ORM & Prometheus metrics
 ├── frontend/             # React 19 Vite web application
 ├── deployments/          # DevOps & Infrastructure orchestration
 │   ├── docker/           # Docker Compose files & Nginx gateway proxy
@@ -31,6 +32,7 @@ uptime-monitor/
 ├── docs/                 # Complete system documentation guides
 │   ├── ARCHITECTURE.md   # High-level architecture & design
 │   ├── CONTRIBUTING.md   # Collaboration guidelines
+│   ├── DATABASE.md       # SQLite schema & persistence guide
 │   ├── DOCKER.md         # Container deployment & hardening
 │   ├── JENKINS.md        # CI/CD pipeline setup & automation
 │   ├── KUBERNETES.md     # Pod management & operations
@@ -49,6 +51,7 @@ uptime-monitor/
 ## 🌟 Key Features
 
 * **Real-time Website Ping & Health Checks**: Instant response time measurements and uptime monitoring.
+* **Database Persistence**: Automatic SQLite storage for monitored service targets and time-stamped ping logs.
 * **Prometheus & Grafana Observability**: Native `/metrics` endpoint with latency histograms and alert rules.
 * **Glass Morphism UI**: Premium futuristic dark mode dashboard with ambient glowing 3D elements.
 * **Interactive Latency Graphs**: Visual 24-hour response time analytics powered by Recharts.
@@ -63,11 +66,12 @@ uptime-monitor/
 
 - **Node.js**: v20.12.0+ or v22.x
 - **Frontend**: React 19, Tailwind CSS, Recharts, React Router v7
-- **Backend**: Python FastAPI, `httpx`, Prometheus Client, Pydantic v2, Uvicorn
+- **Backend**: Python FastAPI, `httpx`, SQLAlchemy, SQLite, Prometheus Client, Pydantic v2, Uvicorn
 - **DevOps & Observability**: Docker, Kubernetes, Jenkins, Prometheus, Grafana, Terraform (AWS)
 
 ### 📚 Detailed Documentation Guides
 - 🏛️ [System Architecture](docs/ARCHITECTURE.md)
+- 🗄️ [Database Schema & Persistence Guide](docs/DATABASE.md)
 - 📊 [Observability & Prometheus Guide](docs/OBSERVABILITY.md)
 - 🐳 [Docker Deployment & Hardening Guide](docs/DOCKER.md)
 - 🏗️ [Jenkins CI/CD Pipeline Guide](docs/JENKINS.md)
