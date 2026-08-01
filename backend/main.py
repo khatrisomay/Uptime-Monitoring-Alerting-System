@@ -93,7 +93,7 @@ async def monitor_url(req: MonitorRequest, db: Session = Depends(get_db)):
         ping_log = PingLogModel(service_id=service.id, status=status, response_time_ms=ping_ms)
         db.add(ping_log)
         db.commit()
-    except Exception as e:
+    except Exception:
         db.rollback()
 
     return {
@@ -129,6 +129,27 @@ async def get_status(db: Session = Depends(get_db)):
                 "uptime": 100.0 if s.status == "UP" else 0.0,
                 "ping_ms": s.ping_ms
             } for s in services
+        ]
+    }
+
+@app.get("/api/services/{service_id}/history")
+async def get_service_history(service_id: int, limit: int = 50, db: Session = Depends(get_db)):
+    """
+    Returns historical ping logs for a specific service.
+    """
+    service = db.query(ServiceModel).filter(ServiceModel.id == service_id).first()
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+
+    logs = db.query(PingLogModel).filter(PingLogModel.service_id == service_id).order_by(PingLogModel.timestamp.desc()).limit(limit).all()
+    return {
+        "service": service.name,
+        "history": [
+            {
+                "timestamp": log.timestamp.isoformat(),
+                "status": log.status,
+                "ping_ms": log.response_time_ms
+            } for log in reversed(logs)
         ]
     }
 
