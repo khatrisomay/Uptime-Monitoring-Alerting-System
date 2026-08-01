@@ -1,10 +1,16 @@
 import time
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from fastapi.responses import Response
+from sqlalchemy.orm import Session
+from database import engine, Base, get_db
+from models import ServiceModel, PingLogModel
+
+# Auto-create tables on startup
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Uptime Monitor API")
 
@@ -39,9 +45,9 @@ async def metrics():
     return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 @app.post("/api/monitor")
-async def monitor_url(req: MonitorRequest):
+async def monitor_url(req: MonitorRequest, db: Session = Depends(get_db)):
     """
-    Pings a URL and returns its status and response time.
+    Pings a URL, returns status/response time, and persists results to SQLite database.
     """
     url = req.url
     if not url.startswith("http"):
@@ -70,25 +76,59 @@ async def monitor_url(req: MonitorRequest):
     if status == "UP":
         PING_LATENCY_HISTOGRAM.observe(ping_seconds)
 
+    # Database Persistence
+    try:
+        hostname = httpx.URL(url).host
+        service = db.query(ServiceModel).filter(ServiceModel.url == url).first()
+        if not service:
+            service = ServiceModel(name=hostname, url=url, status=status, ping_ms=ping_ms)
+            db.add(service)
+            db.commit()
+            db.refresh(service)
+        else:
+            service.status = status
+            service.ping_ms = ping_ms
+            db.commit()
+
+        ping_log = PingLogModel(service_id=service.id, status=status, response_time_ms=ping_ms)
+        db.add(ping_log)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+
     return {
         "status": status,
         "ping_ms": ping_ms
     }
 
 @app.get("/api/status")
-async def get_status():
+async def get_status(db: Session = Depends(get_db)):
     """
-    Mock endpoint returning the status of monitored services.
+    Returns monitored services fetched directly from the database.
     """
+    services = db.query(ServiceModel).all()
+    if not services:
+        return {
+            "services": [
+                {
+                    "name": "Production API",
+                    "url": "https://api.example.com",
+                    "status": "UP",
+                    "uptime": 99.9,
+                    "ping_ms": 42
+                }
+            ]
+        }
     return {
         "services": [
             {
-                "name": "Production API",
-                "url": "https://api.example.com",
-                "status": "UP",
-                "uptime": 99.9,
-                "ping_ms": 42
-            }
+                "id": s.id,
+                "name": s.name,
+                "url": s.url,
+                "status": s.status,
+                "uptime": 100.0 if s.status == "UP" else 0.0,
+                "ping_ms": s.ping_ms
+            } for s in services
         ]
     }
 
