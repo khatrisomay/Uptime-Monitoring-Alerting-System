@@ -8,6 +8,7 @@ from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from database import engine, Base, get_db
 from models import ServiceModel, PingLogModel
+from notifications import send_webhook_alert
 
 # Auto-create tables on startup
 Base.metadata.create_all(bind=engine)
@@ -36,6 +37,7 @@ class ServiceStatus(BaseModel):
 
 class MonitorRequest(BaseModel):
     url: str
+    webhook_url: str = None
 
 @app.get("/metrics")
 async def metrics():
@@ -47,7 +49,7 @@ async def metrics():
 @app.post("/api/monitor")
 async def monitor_url(req: MonitorRequest, db: Session = Depends(get_db)):
     """
-    Pings a URL, returns status/response time, and persists results to SQLite database.
+    Pings a URL, returns status/response time, persists results, and dispatches incident alerts.
     """
     url = req.url
     if not url.startswith("http"):
@@ -76,16 +78,21 @@ async def monitor_url(req: MonitorRequest, db: Session = Depends(get_db)):
     if status == "UP":
         PING_LATENCY_HISTOGRAM.observe(ping_seconds)
 
-    # Database Persistence
+    # Database Persistence & Incident Alerts
     try:
         hostname = httpx.URL(url).host
         service = db.query(ServiceModel).filter(ServiceModel.url == url).first()
+        status_changed = False
+
         if not service:
             service = ServiceModel(name=hostname, url=url, status=status, ping_ms=ping_ms)
             db.add(service)
             db.commit()
             db.refresh(service)
+            status_changed = True
         else:
+            if service.status != status:
+                status_changed = True
             service.status = status
             service.ping_ms = ping_ms
             db.commit()
@@ -93,6 +100,11 @@ async def monitor_url(req: MonitorRequest, db: Session = Depends(get_db)):
         ping_log = PingLogModel(service_id=service.id, status=status, response_time_ms=ping_ms)
         db.add(ping_log)
         db.commit()
+
+        # Dispatch Alert if status changed or if status is DOWN
+        if status_changed or status == "DOWN":
+            await send_webhook_alert(req.webhook_url, service.name, service.url, status, ping_ms)
+
     except Exception:
         db.rollback()
 
