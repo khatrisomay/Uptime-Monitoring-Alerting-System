@@ -31,6 +31,7 @@ uptime-monitor/
 │   └── terraform/        # AWS EKS & VPC Infrastructure as Code (IaC)
 ├── docs/                 # Complete system documentation guides
 │   ├── ARCHITECTURE.md   # High-level architecture & design
+│   ├── ALERTING.md       # Webhook & Incident alert notifications
 │   ├── CONTRIBUTING.md   # Collaboration guidelines
 │   ├── DATABASE.md       # SQLite schema & persistence guide
 │   ├── DOCKER.md         # Container deployment & hardening
@@ -51,6 +52,7 @@ uptime-monitor/
 ## 🌟 Key Features
 
 * **Real-time Website Ping & Health Checks**: Instant response time measurements and uptime monitoring.
+* **Automated Webhook Alerts**: Instant Slack, Discord, and PagerDuty notifications on status transitions.
 * **Database Persistence**: Automatic SQLite storage for monitored service targets and time-stamped ping logs.
 * **Prometheus & Grafana Observability**: Native `/metrics` endpoint with latency histograms and alert rules.
 * **Glass Morphism UI**: Premium futuristic dark mode dashboard with ambient glowing 3D elements.
@@ -71,6 +73,7 @@ uptime-monitor/
 
 ### 📚 Detailed Documentation Guides
 - 🏛️ [System Architecture](docs/ARCHITECTURE.md)
+- 🚨 [Alerting & Notifications Guide](docs/ALERTING.md)
 - 🗄️ [Database Schema & Persistence Guide](docs/DATABASE.md)
 - 📊 [Observability & Prometheus Guide](docs/OBSERVABILITY.md)
 - 🐳 [Docker Deployment & Hardening Guide](docs/DOCKER.md)
