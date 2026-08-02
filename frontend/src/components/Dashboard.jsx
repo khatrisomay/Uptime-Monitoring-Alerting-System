@@ -5,6 +5,7 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianG
 export default function Dashboard() {
   const navigate = useNavigate();
   const [urlInput, setUrlInput] = useState('');
+  const [webhookInput, setWebhookInput] = useState('');
   const [isPinging, setIsPinging] = useState(false);
   const [isRefreshingAll, setIsRefreshingAll] = useState(false);
   const [filterStatus, setFilterStatus] = useState('ALL'); // 'ALL' | 'UP' | 'DOWN'
@@ -92,7 +93,7 @@ export default function Dashboard() {
       const response = await fetch('http://localhost:8000/api/monitor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: fullUrl })
+        body: JSON.stringify({ url: fullUrl, webhook_url: webhookInput || undefined })
       });
       if (response.ok) {
         const data = await response.json();
