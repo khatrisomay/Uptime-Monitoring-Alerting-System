@@ -240,6 +240,10 @@ export default function Dashboard() {
         <div className="hidden md:flex items-center gap-8">
           <a className="text-primary font-bold border-b-2 border-primary py-1" href="#">Dashboard</a>
           <a className="text-on-surface/70 hover:text-white transition-colors" href="#">Analytics</a>
+          <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono font-bold">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            SYSTEM OPERATIONAL
+          </span>
         </div>
         <button 
           onClick={() => navigate('/login')}
