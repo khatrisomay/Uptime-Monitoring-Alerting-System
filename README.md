@@ -35,6 +35,7 @@ uptime-monitor/
 │   ├── CONTRIBUTING.md   # Collaboration guidelines
 │   ├── DATABASE.md       # SQLite schema & persistence guide
 │   ├── DOCKER.md         # Container deployment & hardening
+│   ├── HEALTHCHECKS.md   # Kubernetes probes & health diagnostics
 │   ├── JENKINS.md        # CI/CD pipeline setup & automation
 │   ├── KUBERNETES.md     # Pod management & operations
 │   ├── OBSERVABILITY.md  # Prometheus metrics & Grafana guide
@@ -52,6 +53,7 @@ uptime-monitor/
 ## 🌟 Key Features
 
 * **Real-time Website Ping & Health Checks**: Instant response time measurements and uptime monitoring.
+* **Kubernetes Diagnostic Probes**: Native `/healthz` and `/readyz` endpoints for liveness & readiness checks.
 * **Automated Webhook Alerts**: Instant Slack, Discord, and PagerDuty notifications on status transitions.
 * **Database Persistence**: Automatic SQLite storage for monitored service targets and time-stamped ping logs.
 * **Prometheus & Grafana Observability**: Native `/metrics` endpoint with latency histograms and alert rules.
@@ -73,6 +75,7 @@ uptime-monitor/
 
 ### 📚 Detailed Documentation Guides
 - 🏛️ [System Architecture](docs/ARCHITECTURE.md)
+- 🩺 [Health Checks & Kubernetes Diagnostics Guide](docs/HEALTHCHECKS.md)
 - 🚨 [Alerting & Notifications Guide](docs/ALERTING.md)
 - 🗄️ [Database Schema & Persistence Guide](docs/DATABASE.md)
 - 📊 [Observability & Prometheus Guide](docs/OBSERVABILITY.md)
@@ -93,6 +96,7 @@ docker-compose up --build -d
 ```
 - **Frontend App**: [http://localhost:80](http://localhost:80)
 - **Backend API**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Health Diagnostics**: [http://localhost:8000/healthz](http://localhost:8000/healthz) | [http://localhost:8000/readyz](http://localhost:8000/readyz)
 - **Metrics Endpoint**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
 
 ---
