@@ -39,6 +39,24 @@ class MonitorRequest(BaseModel):
     url: str
     webhook_url: str = None
 
+@app.get("/healthz")
+async def healthz():
+    """
+    Kubernetes Liveness Probe endpoint.
+    """
+    return {"status": "ok", "service": "uptime-backend"}
+
+@app.get("/readyz")
+async def readyz(db: Session = Depends(get_db)):
+    """
+    Kubernetes Readiness Probe endpoint checking database connectivity.
+    """
+    try:
+        db.execute("SELECT 1")
+        return {"status": "ready", "database": "connected"}
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Database unready: {e}")
+
 @app.get("/metrics")
 async def metrics():
     """
